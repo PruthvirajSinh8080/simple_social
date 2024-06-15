@@ -1,0 +1,34 @@
+date 31-1-2024 logs.....
+
+1. sorted the function from script.js to individual script files like signup.js and signin.js.
+
+date 01-02-2024
+
+1. sorted the problem where user is redirected but didnt get notifyed.
+2. now the sign in page is working atleast.
+3. fixed the bug where unauthenticate access is possible to registration success page without login.
+
+date 02-02-2024
+
+1. maded the alert messages dynamic in the sign in page. now its shows the error messages when the user tries to use the site without the login.
+
+date 03-02-2024
+
+1. maded the ui for email verification.
+2. changed the path of sign up when user get registerd they got redirected to email verification page .
+3. now user info is availabel in session and encrypted.
+
+date 09-02-2024
+
+1. user Now can verify while signin then login to desh board.
+2. send otp and verify it working.
+3. banned user can not login.
+
+date 13-02-2024 
+
+1. fix the issue with the sending data and receiveing the info from server for forget pass word.
+2. the forgetPass function is now fully working.
+
+date 25-02-2024
+
+1. all problem releted to user signup  and signin is now solved.

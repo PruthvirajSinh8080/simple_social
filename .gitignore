@@ -1,0 +1,79 @@
+# Logs and debug output
+*.log
+*.log.*
+logs/
+debug.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Composer dependency directory
+vendor/
+
+# Composer metadata
+composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+
+# Vagrant
+.vagrant/
+
+# Laravel specific
+storage/
+bootstrap/cache/
+
+# Symfony specific
+/var/
+/vendor/
+/.env.local
+/.phpunit.result.cache
+/.vscode/
+
+# CakePHP specific
+/tmp/
+/logs/
+plugins/
+vendor/
+
+# Joomla specific
+/tmp
+/logs
+
+# WordPress specific
+wp-config.php
+.htaccess
+/wp-content/uploads/
+/wp-content/upgrade/
+/wp-content/backup-db/
+/wp-content/wp-cache-config.php
+/wp-content/cache/
+sitemap.xml
+sitemap.xml.gz
+
+# Drupal specific
+sites/default/files/
+sites/default/private/
+sites/default/settings.php
+sites/default/settings.local.php
+sites/default/services.yml
+sites/default/services.local.yml
+
+# Zend Framework specific
+/data/cache/
+/data/logs/
+/data/sessions/
+/public_html/logs/
+
+# Yii specific
+/runtime/
+
+#folders
+images/
+PHPMailer_master/

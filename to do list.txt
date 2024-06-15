@@ -1,0 +1,27 @@
+1. Design and Layout: Start by designing the user interface (UI) and user experience (UX) of your social media site. Use HTML and CSS to create the layout, including the header, navigation menu, content area, and footer. Ensure the design is visually appealing and intuitive for users.
+
+2. User Registration and Authentication: Implement a user registration and authentication system using PHP and a database. Allow users to create accounts, log in, and manage their profiles. Use encryption techniques to securely store user passwords.
+
+3.User Profiles: Create a user profile page where users can update their personal information, upload profile pictures, and manage their privacy settings. Use HTML, CSS, and PHP to display and update user profile data.
+
+4.Friendship and Connections: Implement a system for users to connect with each other, send friend requests, and accept or decline requests. Use PHP and a database to manage user connections and friendships.
+
+5. News Feed and Posts: Create a news feed where users can view and interact with posts from their friends. Use PHP and a database to store and retrieve posts. Implement features like liking, commenting, and sharing posts.
+
+6. Notifications: Develop a notification system to inform users about new friend requests, likes, comments, and other activities. Use JavaScript and AJAX to provide real-time updates without refreshing the page.
+
+7. Privacy and Security: Implement privacy settings that allow users to control who can view their posts and profile information. Ensure the site is secure by validating user inputs, preventing SQL injections, and protecting against cross-site scripting (XSS) attacks.
+
+8. Messaging and Chat: Create a messaging system that allows users to send private messages to each other. Use PHP and a database to store and retrieve messages. Implement real-time chat functionality using technologies like WebSockets or long polling.
+
+9. Search and Discovery: Develop a search feature that allows users to find other users, posts, or specific content. Use PHP and a database to perform search queries and display relevant results.
+
+10. Mobile Responsiveness: Ensure your social media site is responsive and optimized for mobile devices. Use CSS media queries and responsive design techniques to adapt the layout and functionality to different screen sizes.
+
+
+
+
+panding to do's
+1. verify forget password 
+2. try to salt and paper to password to secure user and system
+3. create deshboard ui.
