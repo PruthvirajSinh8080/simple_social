@@ -26,15 +26,63 @@ if (!tableExists($conn, $tableName, $database)) {
     ) ENGINE=InnoDB";
 
     if (!mysqli_query($conn, $createTableSQL)) {
-
-        //close connection 
-        require_once('./close_conn.php');
-
         return false;
+    }
+}
 
-        //just for clarity
-        // echo "The Table Post is created.";
-       
+$tableName = "likes";
+
+if (!tableExists($conn, $tableName, $database)) {
+    $createTableSQL = "CREATE TABLE `$tableName` (
+    `like_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `post_id` INT(11) NOT NULL,
+    `u_id` INT(11) NOT NULL,
+    `liked_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`like_id`),
+    FOREIGN KEY (`post_id`) REFERENCES `posts`(`post_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`u_id`) REFERENCES `signup_info`(`u_id`) ON DELETE CASCADE
+) ENGINE=InnoDB";
+
+    if (!mysqli_query($conn, $createTableSQL)) {
+        return false;
+    }
+}
+
+$tableName = "comments";
+
+if (!tableExists($conn, $tableName, $database)) {
+    $createTableSQL = "CREATE TABLE `$tableName` (
+    `comment_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `post_id` INT(11) NOT NULL,
+    `u_id` INT(11) NOT NULL,
+    `comment_text` TEXT NOT NULL,
+    `commented_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`comment_id`),
+    FOREIGN KEY (`post_id`) REFERENCES `posts`(`post_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`u_id`) REFERENCES `signup_info`(`u_id`) ON DELETE CASCADE
+) ENGINE=InnoDB";
+
+    if (!mysqli_query($conn, $createTableSQL)) {
+        return false;
+    }
+}
+
+$tableName = "shares";
+
+if (!tableExists($conn, $tableName, $database)) {
+
+    $createTableSQL = "CREATE TABLE `$tableName` (
+    `share_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `post_id` INT(11) NOT NULL,
+    `u_id` INT(11) NOT NULL,
+    `shared_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`share_id`),
+    FOREIGN KEY (`post_id`) REFERENCES `posts`(`post_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`u_id`) REFERENCES `signup_info`(`u_id`) ON DELETE CASCADE
+) ENGINE=InnoDB";
+
+    if (!mysqli_query($conn, $createTableSQL)) {
+        return false;
     }
 } else {
     $query = "SELECT * FROM posts ;";
@@ -52,19 +100,12 @@ if (!tableExists($conn, $tableName, $database)) {
             $db_exist = "The Table Post Exist.";
             echo json_encode($db_exist);
 
-            //close connection
-            require_once('./close_conn.php');
+
             echo json_encode($result);
         } else {
             $error = array("type" => "error", "errId" => "no_data_found", "errMsg" => "No Data Found");
         }
     } else {
-        //close connection
-        require_once('./close_conn.php');
-
-         //just for clarity
-        //  echo "The Table Post Exist.";
-
         echo json_encode($result);
     }
 }

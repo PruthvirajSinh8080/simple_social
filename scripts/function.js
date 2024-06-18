@@ -521,7 +521,28 @@ export function loadPost(no_Of_Post = 0) {
       card.classList.add("card", "mt-2");
 
       const cardBody = document.createElement("div");
-      cardBody.classList.add("card-body");
+      cardBody.classList.add("card-body","border");
+
+      const userInfo = document.createElement("div");
+      userInfo.classList.add("user-info", "d-flex", "align-items-center","mb-1");
+
+      const userPic = document.createElement("img");
+      userPic.classList.add("user-pic");
+      userPic.src = "images/user.png";
+      userPic.alt = "Profile_Picture";
+      userPic.width = "40";
+      userPic.height = "40";
+
+      const userDetails =document.createElement("div");
+      userDetails.classList.add("user-details", "ms-2");
+
+      const userName =document.createElement("div");
+      userName.classList.add("user-name", "fw-bold");
+      userName.textContent = "Pruthvirajsinh";
+
+      const PostCreationTime =document.createElement("div");
+      PostCreationTime.classList.add("post-time" , "text-muted");
+      PostCreationTime.textContent = "2024-06-12 18:32:43";
 
       const title = document.createElement("h5");
       title.classList.add("card-title", "my-1");
@@ -569,6 +590,11 @@ export function loadPost(no_Of_Post = 0) {
       shareButton.innerHTML = `<b>${feed[10]}</b> Shares`;
 
       card.appendChild(cardBody);
+      cardBody.appendChild(userInfo);
+      userInfo.appendChild(userPic);
+      userInfo.appendChild(userDetails);
+      userDetails.appendChild(userName);
+      userDetails.appendChild(PostCreationTime);
       cardBody.appendChild(title);
       cardBody.appendChild(imageDiv);
       imageDiv.appendChild(mediaContainer);
