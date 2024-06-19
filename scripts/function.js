@@ -504,7 +504,7 @@ export function loadPost(no_Of_Post = 0) {
         throw new Error(`Server responded with status: ${response.status}`);
       }
       const data = await response.json();
-      // console.log(data[1]);
+      // console.log(data.u_id);
       return data;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -514,7 +514,9 @@ export function loadPost(no_Of_Post = 0) {
 
   getPostData(no_Of_Post).then((data) => {
     const feedData = data;
+    // console.log(feedData);
     feedData.forEach((feed) => {
+      // console.log(feed);
       const postDiv = document.getElementById("post");
 
       const card = document.createElement("div");
@@ -523,12 +525,12 @@ export function loadPost(no_Of_Post = 0) {
       const cardBody = document.createElement("div");
       cardBody.classList.add("card-body","border");
 
-      const userInfo = document.createElement("div");
-      userInfo.classList.add("user-info", "d-flex", "align-items-center","mb-1");
+      const postInfo = document.createElement("div");
+      postInfo.classList.add(`${feed.post_id}`, "d-flex", "align-items-center","mb-1");
 
       const userPic = document.createElement("img");
       userPic.classList.add("user-pic");
-      userPic.src = "images/user.png";
+      userPic.src = `images/${feed.user_profile_pic}`;
       userPic.alt = "Profile_Picture";
       userPic.width = "40";
       userPic.height = "40";
@@ -538,30 +540,30 @@ export function loadPost(no_Of_Post = 0) {
 
       const userName =document.createElement("div");
       userName.classList.add("user-name", "fw-bold");
-      userName.textContent = "Pruthvirajsinh";
+      userName.textContent = feed.u_name;
 
       const PostCreationTime =document.createElement("div");
       PostCreationTime.classList.add("post-time" , "text-muted");
-      PostCreationTime.textContent = "2024-06-12 18:32:43";
+      PostCreationTime.textContent = new Date(feed.created_at).toLocaleString();
 
       const title = document.createElement("h5");
       title.classList.add("card-title", "my-1");
-      title.textContent = feed[2];
+      title.textContent = feed.title;
 
       const imageDiv = document.createElement("div");
       imageDiv.classList.add("card-img", "border");
 
       //this make decision if the type of media is image or video
       const mediaContainer = document.createElement("div");
-      if (feed[4] == "image/jpeg") {
+      if (feed.media_type == "image/jpeg") {
         const image = document.createElement("img");
-        image.src = `images/${feed[5]}`;
+        image.src = `images/${feed.media}`;
         image.alt = "";
         image.classList.add("img-fluid", "card-img-top", "p-1");
         mediaContainer.appendChild(image);
       } else {
         const video = document.createElement("video");
-        video.src =  `images/${feed[5]}`;
+        video.src =  `images/${feed.media}`;
         video.controls = true; // Adds play, pause, volume controls
         video.classList.add("img-fluid", "card-img-top", "p-1");
         mediaContainer.appendChild(video);
@@ -569,7 +571,7 @@ export function loadPost(no_Of_Post = 0) {
 
       const description = document.createElement("div");
       description.classList.add("my-2", "mx-2");
-      description.textContent = feed[3];
+      description.textContent = feed.post_content;
 
       const buttonsDiv = document.createElement("div");
       buttonsDiv.classList.add("d-flex", "gap-2", "w-100", "my-2");
@@ -577,22 +579,22 @@ export function loadPost(no_Of_Post = 0) {
       const likeButton = document.createElement("button");
       likeButton.classList.add("btn", "btn-primary");
       likeButton.type = "button";
-      likeButton.innerHTML = `<b>${feed[10]}</b> Like`;
+      likeButton.innerHTML = `<b>${feed.like_count}</b> Like`;
 
       const commentButton = document.createElement("button");
       commentButton.classList.add("btn", "btn-secondary");
       commentButton.type = "button";
-      commentButton.innerHTML = `<b>${feed[10]}</b> Comments`;
+      commentButton.innerHTML = `<b>${feed.comment_count}</b> Comments`;
 
       const shareButton = document.createElement("button");
       shareButton.classList.add("btn", "btn-info");
       shareButton.type = "button";
-      shareButton.innerHTML = `<b>${feed[10]}</b> Shares`;
+      shareButton.innerHTML = `<b>${feed.share_count}</b> Shares`;
 
       card.appendChild(cardBody);
-      cardBody.appendChild(userInfo);
-      userInfo.appendChild(userPic);
-      userInfo.appendChild(userDetails);
+      cardBody.appendChild(postInfo);
+      postInfo.appendChild(userPic);
+      postInfo.appendChild(userDetails);
       userDetails.appendChild(userName);
       userDetails.appendChild(PostCreationTime);
       cardBody.appendChild(title);

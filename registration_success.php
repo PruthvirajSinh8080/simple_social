@@ -31,25 +31,11 @@ showPage("header", ['title' => 'DeshBoard']);
       <h5 class="card-title">Hello, Welcome To The Dashboard Of The Site</h5>
       <p class="card-text">You have logged in using this <a>"<?= $_SESSION['user_email'] ?>"</a>.</p>
       <a href="./user_profile.php?<?php echo $_SESSION['user_name'] ?>" class="btn btn-primary">Visit Your Profile</a>
+
+      <button class="btn btn-primary text-white ms-1" type="button"><a href="user_profile.php" class="text-white text-decoration-none">Create Post</a></button>
     </div>
   </div>
 
-  <!-- Instant Post Creation Card -->
-  <div class="container-fluid my-3 m-auto">
-    <div class="row justify-content-center ">
-      <div class="col-12 col-md-8 col-lg-8 col-xl-8 col-xxl-6">
-        <div class="d-flex justify-content-center mb-2"> <!-- Center horizontally -->
-          <div class="card" style="width: 100%;"> <!-- Added inline style for width -->
-            <div class="card-body">
-              <h5 class="card-title">What's in your mind?</h5>
-              <textarea class="form-control mb-1" rows="0" placeholder="Write your post here"></textarea>
-              <button class="btn btn-primary text-white" type="button"><a href="user_profile.php" class="text-white text-decoration-none">Create Post</a></button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Post Section -->
   <div class="row justify-content-center mt-2">

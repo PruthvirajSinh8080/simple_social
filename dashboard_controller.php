@@ -5,12 +5,15 @@ require_once('./conn.php');
 session_start();
 
 
-$rawData = file_get_contents("php://input");
-$decoded = json_decode($rawData, true);
+// $rawData = file_get_contents("php://input");
+// $decoded = json_decode($rawData, true);
 
+// providing defualt arguments 
 $tableName = "posts";
 $database = "user_signup_info";
 
+
+// checks if table posts is present or not
 if (!tableExists($conn, $tableName, $database)) {
     $createTableSQL = "CREATE TABLE `$tableName` (
         `post_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -32,6 +35,7 @@ if (!tableExists($conn, $tableName, $database)) {
 
 $tableName = "likes";
 
+// checks if table likes is present or not
 if (!tableExists($conn, $tableName, $database)) {
     $createTableSQL = "CREATE TABLE `$tableName` (
     `like_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -50,6 +54,7 @@ if (!tableExists($conn, $tableName, $database)) {
 
 $tableName = "comments";
 
+// checks if table comments is present or not
 if (!tableExists($conn, $tableName, $database)) {
     $createTableSQL = "CREATE TABLE `$tableName` (
     `comment_id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -69,6 +74,7 @@ if (!tableExists($conn, $tableName, $database)) {
 
 $tableName = "shares";
 
+// checks if table likes is present or not
 if (!tableExists($conn, $tableName, $database)) {
 
     $createTableSQL = "CREATE TABLE `$tableName` (
@@ -85,27 +91,42 @@ if (!tableExists($conn, $tableName, $database)) {
         return false;
     }
 } else {
-    $query = "SELECT * FROM posts ;";
-    $query_getPost = mysqli_query($conn, $query);
-    $row = mysqli_num_rows($query_getPost);
-    $result = mysqli_fetch_all($query_getPost);
+    // if all table is present in db than this else condition will run to get post data
+    $query = "SELECT 
+    p.u_id,
+    p.post_id,
+    p.title,
+    p.post_content,
+    p.media_type,
+    p.media,
+    p.created_at,
+    p.updated_at,
+    (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.post_id) AS like_count,
+    (SELECT COUNT(*) FROM shares WHERE shares.post_id = p.post_id) AS share_count,
+    (SELECT user_name FROM signup_info WHERE signup_info.u_id = p.u_id) AS u_name ,
+    (SELECT profile_pic FROM signup_info WHERE signup_info.u_id = p.u_id) AS user_profile_pic,
+    COUNT(c.comment_id) AS comment_count
+FROM posts p
+LEFT JOIN comments c ON p.post_id = c.post_id
+GROUP BY p.post_id
+ORDER BY p.created_at DESC;";
 
-    if ($row >= 10) {
-        $postQuery = "SELECT * FROM posts ORDER BY RAND()LIMIT 10";
-        $query_postQuery = mysqli_query($conn, $postQuery);
-        $result = mysqli_fetch_all($query_getPost);
-        if ($result) {
+//make connection and run query 
+$result = mysqli_query($conn, $query);
 
-            //just for clarity
-            $db_exist = "The Table Post Exist.";
-            echo json_encode($db_exist);
-
-
-            echo json_encode($result);
-        } else {
-            $error = array("type" => "error", "errId" => "no_data_found", "errMsg" => "No Data Found");
-        }
-    } else {
-        echo json_encode($result);
+// fetch data from server to send to frontend in json formate
+if (mysqli_num_rows($result) > 0) {
+    $posts = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $posts[] = $row;
     }
+    echo json_encode($posts); // JSON response
+} else {
+    echo json_encode([]); //  empty array if no results
 }
+
+// Close connection
+mysqli_close($conn);
+
+}
+?>

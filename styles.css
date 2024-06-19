@@ -5,7 +5,8 @@
 }
 body,hmtl{
     min-height: 100%;
-
+    background-image: url(https://picsum.photos/seed/picsum/200/300);
+    background-repeat: no-repeat;
 }
 .welcome-page{
 position: fixed;
