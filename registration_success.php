@@ -35,10 +35,12 @@ showPage("header", ['title' => 'DeshBoard']);
       <button class="btn btn-primary text-white ms-1" type="button"><a href="user_profile.php" class="text-white text-decoration-none">Create Post</a></button>
     </div>
   </div>
-
+  <div class="loader mt-5 m-auto "></div>
 
   <!-- Post Section -->
   <div class="row justify-content-center mt-2">
+ 
+
     <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 col-xxl-6" id="post">
       <!-- New Post Card -->
       <!-- <div class="card-body">
@@ -61,7 +63,9 @@ showPage("header", ['title' => 'DeshBoard']);
     </div>
   </div>
 
-  <div class="text-center my-5"><button class="btn btn-success" id="loadMore">Load More Post</button></div>
+  <div class="text-center my-5"><button class="btn btn-success" id="loadMore">Load More Post</button>
+  
+</div>
   <script type="module" src="./scripts/dashboard.js"></script>
   <?php
   include("./footer.php");

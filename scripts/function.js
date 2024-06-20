@@ -491,31 +491,27 @@ export function changePass() {
   }
 }
 //--------------------- post logic-----------
-export function loadPost(no_Of_Post = 0) {
+export async function loadPost(currentOffset) {
   const postDiv = document.getElementById("post");
+  
+  const loadingIndicator = document.querySelector(".loader");
+  loadingIndicator.style.display = "block";
 
-  async function getPostData(no_Of_Post) {
-    try {
-      const response = await fetch("dashboard_controller.php?", {
-        method: "POST",
-        body: JSON.stringify(no_Of_Post),
-      });
-      if (!response.ok) {
-        throw new Error(`Server responded with status: ${response.status}`);
-      }
-      const data = await response.json();
-      // console.log(data.u_id);
-      return data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return null;
+  // get posts from database
+ 
+  try {
+    // console.log(currentOffset);
+    const response = await fetch("dashboard_controller.php?", {
+      method: "POST",
+      body: JSON.stringify(currentOffset),
+    });
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
     }
-  }
+    const feedData = await response.json();
 
-  getPostData(no_Of_Post).then((data) => {
-    const feedData = data;
-    // console.log(feedData);
     feedData.forEach((feed) => {
+      // console.log(currentOffset);
       // console.log(feed);
       const postDiv = document.getElementById("post");
 
@@ -523,10 +519,15 @@ export function loadPost(no_Of_Post = 0) {
       card.classList.add("card", "mt-2");
 
       const cardBody = document.createElement("div");
-      cardBody.classList.add("card-body","border");
+      cardBody.classList.add("card-body", "border");
 
       const postInfo = document.createElement("div");
-      postInfo.classList.add(`${feed.post_id}`, "d-flex", "align-items-center","mb-1");
+      postInfo.classList.add(
+        `${feed.post_id}`,
+        "d-flex",
+        "align-items-center",
+        "mb-1"
+      );
 
       const userPic = document.createElement("img");
       userPic.classList.add("user-pic");
@@ -535,15 +536,15 @@ export function loadPost(no_Of_Post = 0) {
       userPic.width = "40";
       userPic.height = "40";
 
-      const userDetails =document.createElement("div");
+      const userDetails = document.createElement("div");
       userDetails.classList.add("user-details", "ms-2");
 
-      const userName =document.createElement("div");
+      const userName = document.createElement("div");
       userName.classList.add("user-name", "fw-bold");
       userName.textContent = feed.u_name;
 
-      const PostCreationTime =document.createElement("div");
-      PostCreationTime.classList.add("post-time" , "text-muted");
+      const PostCreationTime = document.createElement("div");
+      PostCreationTime.classList.add("post-time", "text-muted");
       PostCreationTime.textContent = new Date(feed.created_at).toLocaleString();
 
       const title = document.createElement("h5");
@@ -563,7 +564,7 @@ export function loadPost(no_Of_Post = 0) {
         mediaContainer.appendChild(image);
       } else {
         const video = document.createElement("video");
-        video.src =  `images/${feed.media}`;
+        video.src = `images/${feed.media}`;
         video.controls = true; // Adds play, pause, volume controls
         video.classList.add("img-fluid", "card-img-top", "p-1");
         mediaContainer.appendChild(video);
@@ -608,8 +609,16 @@ export function loadPost(no_Of_Post = 0) {
 
       return postDiv.appendChild(card);
     });
-  });
+    
+    loadingIndicator.style.display = "none";
+    // console.log(feedData.length);
+    return feedData.length;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
 }
+
 //          ----upload post to database ----
 export async function uploadPostData() {
   try {

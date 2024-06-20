@@ -5,8 +5,10 @@ require_once('./conn.php');
 session_start();
 
 
-// $rawData = file_get_contents("php://input");
-// $decoded = json_decode($rawData, true);
+$rawData = file_get_contents("php://input");
+$offset = json_decode($rawData, true);
+
+// echo $offset;
 
 // providing defualt arguments 
 $tableName = "posts";
@@ -103,30 +105,30 @@ if (!tableExists($conn, $tableName, $database)) {
     p.updated_at,
     (SELECT COUNT(*) FROM likes WHERE likes.post_id = p.post_id) AS like_count,
     (SELECT COUNT(*) FROM shares WHERE shares.post_id = p.post_id) AS share_count,
-    (SELECT user_name FROM signup_info WHERE signup_info.u_id = p.u_id) AS u_name ,
+    (SELECT user_name FROM signup_info WHERE signup_info.u_id = p.u_id) AS u_name,
     (SELECT profile_pic FROM signup_info WHERE signup_info.u_id = p.u_id) AS user_profile_pic,
     COUNT(c.comment_id) AS comment_count
 FROM posts p
 LEFT JOIN comments c ON p.post_id = c.post_id
 GROUP BY p.post_id
-ORDER BY p.created_at DESC;";
+ORDER BY p.post_id DESC
+LIMIT 10 OFFSET $offset;
+";
 
-//make connection and run query 
-$result = mysqli_query($conn, $query);
+    //make connection and run query 
+    $result = mysqli_query($conn, $query);
 
-// fetch data from server to send to frontend in json formate
-if (mysqli_num_rows($result) > 0) {
-    $posts = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $posts[] = $row;
+    // fetch data from server to send to frontend in json formate
+    if (mysqli_num_rows($result) > 0) {
+        $posts = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $posts[] = $row;
+        }
+        echo json_encode($posts); // JSON response
+    } else {
+        echo json_encode([]); //  empty array if no results
     }
-    echo json_encode($posts); // JSON response
-} else {
-    echo json_encode([]); //  empty array if no results
-}
 
-// Close connection
-mysqli_close($conn);
-
+    // Close connection
+    mysqli_close($conn);
 }
-?>
