@@ -32,10 +32,10 @@ showPage("header", ['title' => 'DeshBoard']);
       <p class="card-text">You have logged in using this <a>"<?= $_SESSION['user_email'] ?>"</a>.</p>
       <a href="./user_profile.php?<?php echo $_SESSION['user_name'] ?>" class="btn btn-primary">Visit Your Profile</a>
 
-      <button class="btn btn-primary text-white ms-1" type="button"><a href="user_profile.php" class="text-white text-decoration-none">Create Post</a></button>
+      <button class="btn btn-primary text-white ms-1" type="button"><a href="create_post.php" class="text-white text-decoration-none">Create Post</a></button>
     </div>
   </div>
-  <div class="loader mt-5 m-auto "></div>
+  
 
   <!-- Post Section -->
   <div class="row justify-content-center mt-2">
@@ -62,6 +62,8 @@ showPage("header", ['title' => 'DeshBoard']);
 
     </div>
   </div>
+
+  <div class="loader mt-5 m-auto "></div>
 
   <div class="text-center my-5"><button class="btn btn-success" id="loadMore">Load More Post</button>
   

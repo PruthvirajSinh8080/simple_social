@@ -6,13 +6,11 @@ showPage('header', ['title' => 'welcome']);
 
 <main class="welcome-page">
 
-    <div class="text-center" >
-        <h2>Welcome To This Website</h2>
-    </div>
+    
     <div class="d-grid text-center">
         <div class="card m-auto  my-3  ">
             <div class="card-header ">
-                Welcome!!
+            <h2>Welcome To This Website</h2>
             </div>
             <div class="card-body">
                 <h5 class="card-title text-dark">

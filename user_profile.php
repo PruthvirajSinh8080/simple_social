@@ -54,26 +54,7 @@ showPage("header", ['title' => "Welcome $userName"]);
                     </div>
                 </div>
 
-                <!-- Post Creation Form -->
-                <div class="card my-2">
-                    <div class="card-body">
-                        <form id="postForm">
-                            <div class="mb-3">
-                                <label for="postTitle" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="postTitle" placeholder="Enter post title" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="postContent" class="form-label">Content</label>
-                                <textarea class="form-control" id="postContent" rows="3" placeholder="Enter post content"></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="postedia" class="form-label">Image</label>
-                                <input class="form-control" type="file" id="postMedia" accept="image/*, video/*">
-                            </div>
-                            <button type="submit" id="submitPostData" class="btn btn-primary">Create Post</button>
-                        </form>
-                    </div>
-                </div>
+               
             </div>
         </div>
     </div>

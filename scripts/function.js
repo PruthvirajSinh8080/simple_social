@@ -493,12 +493,12 @@ export function changePass() {
 //--------------------- post logic-----------
 export async function loadPost(currentOffset) {
   const postDiv = document.getElementById("post");
-  
+
   const loadingIndicator = document.querySelector(".loader");
   loadingIndicator.style.display = "block";
 
   // get posts from database
- 
+
   try {
     // console.log(currentOffset);
     const response = await fetch("dashboard_controller.php?", {
@@ -609,7 +609,7 @@ export async function loadPost(currentOffset) {
 
       return postDiv.appendChild(card);
     });
-    
+
     loadingIndicator.style.display = "none";
     // console.log(feedData.length);
     return feedData.length;
@@ -620,8 +620,10 @@ export async function loadPost(currentOffset) {
 }
 
 //          ----upload post to database ----
-export async function uploadPostData() {
+export async function uploadPostData(submitPostBtn) {
   try {
+    let uploadProgress = document.getElementById("upload-progress");
+    let ProgressBar = document.getElementById("progress-bar");
     let postTitle = document.getElementById("postTitle").value;
     let postContent = document.getElementById("postContent").value;
     let postMedia = document.getElementById("postMedia").files[0];
@@ -640,7 +642,9 @@ export async function uploadPostData() {
     if (postMedia !== undefined) {
       formData.append("postMedia", postMedia);
     }
-
+    uploadProgress.style.display = "block";
+    ProgressBar.style.width = 0 + '%';
+    submitPostBtn.classList.add("disabled");
     // Send data to the server
     const response = await fetch("uploadPost.php?", {
       method: "POST",
@@ -650,10 +654,14 @@ export async function uploadPostData() {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+
         return response.json(); // Parse JSON directly here
       })
       .then((data) => {
+        
         handleData(data);
+        ProgressBar.style.width = data.percent + '%';
+        submitPostBtn.classList.remove("disabled");
       });
 
     // const confirmation = await response.json();
@@ -662,3 +670,6 @@ export async function uploadPostData() {
     console.error("An error occurred:", error.message);
   }
 }
+
+
+//

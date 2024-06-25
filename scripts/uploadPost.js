@@ -5,5 +5,5 @@ redAlert();
 let submitPostBtn = document.getElementById("submitPostData");
 submitPostBtn.addEventListener("click",(e)=>{
     e.preventDefault();
-    uploadPostData();
+    uploadPostData(submitPostBtn);
 })

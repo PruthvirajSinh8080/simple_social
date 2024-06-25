@@ -98,8 +98,8 @@ function insertUserInfo($conn, $user_name, $user_email, $user_pass_encryp_hash)
     if (mysqli_query($conn, $sql)) {
         //query inserted succesfully
         mysqli_close($conn);
-        
-    
+
+
         $_SESSION['user_name'] = $user_name;
         $_SESSION['user_email'] = $user_email;
         $_SESSION['user_pass_encryp_hash'] = $user_pass_encryp_hash;
@@ -185,3 +185,14 @@ function userAccountStatus($userEmail, $conn, $status)
     }
 }
 
+//
+
+function get_upload_progress($a)
+{
+    $progress =  $_SESSION[$a];
+    $total_size = $_FILES['postMedia']['size'];
+    $upload_size = filesize($_FILES['postMedia']['tmp_name']);
+    $percent = round(($upload_size / $total_size) * 100, 2);
+    // print_r(['persent' => $percent , 'total_size' => $total_size , 'upload_size' => $upload_size]);
+    return $percent;
+}
