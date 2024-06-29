@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("sssss", $u_id, $postTitle, $postContent, $fileType, $filename);
             $stmt->execute();
 
-            $progress = get_upload_progress($filename);
+            $progress = get_upload_progress();
             // echo $progress;
             //upload file to server
             if (!move_uploaded_file($file['tmp_name'], $upload_dir . $filename)) {
@@ -94,11 +94,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //close connection
         require_once('./close_conn.php');
     }
-} else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-
-    $progress = get_upload_progress($filename);
-
-    $success = array( "percent" => $progress);
-    $jsonSuccess = json_encode($success);
-    echo $jsonSuccess;
 }
+//  else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    
+// //     $progress = get_upload_progress();
+
+// //     $success = array( "percent" => $progress);
+// //     $jsonSuccess = json_encode($success);
+// //     echo $jsonSuccess;
+// // }

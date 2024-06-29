@@ -240,7 +240,7 @@ export function verifyUserInfo() {
       return response.json(); // Parse JSON directly here
     })
     .then((data) => {
-      console.log(data + "    here");
+      // console.log(data + "    here");
       sessionStorage.setItem("u_id", data.u_id);
       handleData(data, userData);
     })
@@ -536,25 +536,36 @@ export async function loadPost(currentOffset) {
       userPic.width = "40";
       userPic.height = "40";
 
+        
+
       const userDetails = document.createElement("div");
       userDetails.classList.add("user-details", "ms-2");
+
+      //user name div of post
 
       const userName = document.createElement("div");
       userName.classList.add("user-name", "fw-bold");
       userName.textContent = feed.u_name;
 
+      //upload time div for post
+
       const PostCreationTime = document.createElement("div");
       PostCreationTime.classList.add("post-time", "text-muted");
       PostCreationTime.textContent = new Date(feed.created_at).toLocaleString();
+
+          // title div for post
 
       const title = document.createElement("h5");
       title.classList.add("card-title", "my-1");
       title.textContent = feed.title;
 
+        //image div for post
+
       const imageDiv = document.createElement("div");
       imageDiv.classList.add("card-img", "border");
 
       //this make decision if the type of media is image or video
+
       const mediaContainer = document.createElement("div");
       if (feed.media_type == "image/jpeg") {
         const image = document.createElement("img");
@@ -570,6 +581,8 @@ export async function loadPost(currentOffset) {
         mediaContainer.appendChild(video);
       }
 
+          //discription area for post
+
       const description = document.createElement("div");
       description.classList.add("my-2", "mx-2");
       description.textContent = feed.post_content;
@@ -577,20 +590,37 @@ export async function loadPost(currentOffset) {
       const buttonsDiv = document.createElement("div");
       buttonsDiv.classList.add("d-flex", "gap-2", "w-100", "my-2");
 
+      //---------like button--------//
+
       const likeButton = document.createElement("button");
-      likeButton.classList.add("btn", "btn-primary");
+      likeButton.classList.add("btn", "btn-primary", "likes");
       likeButton.type = "button";
       likeButton.innerHTML = `<b>${feed.like_count}</b> Like`;
+
+      // Attach event listener to the like button
+      likeButton.addEventListener("click", async function (event) {
+        try {
+          await likePost(feed.post_id, event);
+        } catch (error) {
+          console.error("An error occurred while liking the post:", error);
+        }
+      });
+
+      //---------comment button--------//
 
       const commentButton = document.createElement("button");
       commentButton.classList.add("btn", "btn-secondary");
       commentButton.type = "button";
       commentButton.innerHTML = `<b>${feed.comment_count}</b> Comments`;
 
+      //---------share button--------//
+
       const shareButton = document.createElement("button");
       shareButton.classList.add("btn", "btn-info");
       shareButton.type = "button";
       shareButton.innerHTML = `<b>${feed.share_count}</b> Shares`;
+
+      //append created divs to their respective parent div
 
       card.appendChild(cardBody);
       cardBody.appendChild(postInfo);
@@ -609,9 +639,9 @@ export async function loadPost(currentOffset) {
 
       return postDiv.appendChild(card);
     });
-
+    // turn off the loading animation
     loadingIndicator.style.display = "none";
-    // console.log(feedData.length);
+
     return feedData.length;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -622,12 +652,14 @@ export async function loadPost(currentOffset) {
 //          ----upload post to database ----
 export async function uploadPostData(submitPostBtn) {
   try {
+    //gather info post data and
     let uploadProgress = document.getElementById("upload-progress");
     let ProgressBar = document.getElementById("progress-bar");
     let postTitle = document.getElementById("postTitle").value;
     let postContent = document.getElementById("postContent").value;
     let postMedia = document.getElementById("postMedia").files[0];
 
+    // create a new form object and append post info to it
     let formData = new FormData();
     formData.append("u_id", sessionStorage.getItem("u_id"));
 
@@ -642,34 +674,67 @@ export async function uploadPostData(submitPostBtn) {
     if (postMedia !== undefined) {
       formData.append("postMedia", postMedia);
     }
+    //once the upload is started make upload bar visible
     uploadProgress.style.display = "block";
-    ProgressBar.style.width = 0 + '%';
+    ProgressBar.style.width = 0 + "%";
     submitPostBtn.classList.add("disabled");
+
     // Send data to the server
-    const response = await fetch("uploadPost.php?", {
+    const response = fetch("uploadPost.php?", {
       method: "POST",
       body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+    });
+    //wait for data to arrive from server
+    const res = await response;
 
-        return response.json(); // Parse JSON directly here
-      })
-      .then((data) => {
-        
-        handleData(data);
-        ProgressBar.style.width = data.percent + '%';
-        submitPostBtn.classList.remove("disabled");
-      });
+    if (!res.ok) {
+      throw new Error("Network response was not ok for the first request");
+    }
 
-    // const confirmation = await response.json();
-    // console.log("Confirmation:", confirmation);
+    const data = await res.json();
+    //show the user that post is uploaded
+    handleData(data);
+    ProgressBar.style.width = data.percent + "%";
+    ProgressBar.classList.add("bg-success");
+    submitPostBtn.classList.remove("disabled");
+    // console.log(data);
   } catch (error) {
     console.error("An error occurred:", error.message);
   }
 }
 
+//updated like count upon clicking it
 
-//
+export async function likePost(postId, event) {
+  try {
+    //extract current like count from string
+
+    let currentLikeCount = parseInt(
+      event.target.querySelector("b").textContent.match(/\d+/)[0]
+    );
+    //send like request to server
+    const response = await fetch("Likes.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ postId: postId }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok.");
+    }
+
+    const res = await response.json();
+
+    //updates the like count to the clicked like button
+    if (res.type === "error") {
+      event.target.querySelector("b").textContent = `${currentLikeCount - 1}`;
+    }
+    if (res.type === "success") {
+      event.target.querySelector("b").textContent = `${currentLikeCount + 1}`;
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+}

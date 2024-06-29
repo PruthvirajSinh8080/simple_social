@@ -148,6 +148,7 @@ function verifyUserInfo($conn, $userOrEmail, $user_pass)
             } else if ($ac_status == 1  && password_verify($user_pass, $password) && ($userOrEmail == $username || $userOrEmail == $email)) {
                 $_SESSION['user_name'] = $username;
                 $_SESSION['user_email'] = $email;
+                $_SESSION['u_id'] =  $u_id;
                 $success = array("type" => "success", "successId" => "verified", "successMsg" => "User Verification Successfull.", "redirect" => "registration_success", "u_id" => "$u_id");
                 echo json_encode($success);
                 exit();
@@ -187,9 +188,8 @@ function userAccountStatus($userEmail, $conn, $status)
 
 //
 
-function get_upload_progress($a)
+function get_upload_progress()
 {
-    $progress =  $_SESSION[$a];
     $total_size = $_FILES['postMedia']['size'];
     $upload_size = filesize($_FILES['postMedia']['tmp_name']);
     $percent = round(($upload_size / $total_size) * 100, 2);

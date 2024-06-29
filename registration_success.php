@@ -3,6 +3,8 @@
 session_start();
 include('./functions.php');
 
+
+
 if (!isset($_SESSION["user_name"])) {
   $error_message = "You cannot use our site without proper login.";
   header("Location: ./sign_in.php?error=" . urlencode($error_message));
@@ -22,6 +24,9 @@ showPage("header", ['title' => 'DeshBoard']);
 <!-------------Hero starts --------------->
 
 <div class="container">
+
+
+
   <!-- Green box with user info -->
   <div class="card m-auto col-sm-12 col-md-8 col-lg-8 col-xl-8 col-xxl-6 ">
     <div class="card-header bg-success text-white">
@@ -35,11 +40,11 @@ showPage("header", ['title' => 'DeshBoard']);
       <button class="btn btn-primary text-white ms-1" type="button"><a href="create_post.php" class="text-white text-decoration-none">Create Post</a></button>
     </div>
   </div>
-  
+
 
   <!-- Post Section -->
   <div class="row justify-content-center mt-2">
- 
+
 
     <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 col-xxl-6" id="post">
       <!-- New Post Card -->
@@ -56,18 +61,44 @@ showPage("header", ['title' => 'DeshBoard']);
           <div><img src="images/66699c735c9098.08744584.jpg" alt="" class="img-fluid card-img-top p-1"></div>
         </div>
         <div class="my-2 mx-2">its content</div>
-        <div class="d-flex gap-2 w-100 my-2"><button class="btn btn-primary" type="button"><b>undefined</b> Like</button><button class="btn btn-secondary" type="button"><b>undefined</b> Comments</button><button class="btn btn-info" type="button"><b>undefined</b> Shares</button></div>
+        <div class="d-flex gap-2 w-100 my-2">
+          <button class="btn btn-primary" type="button"><b>undefined</b> Like</button>
+
+          <button class="btn btn-secondary" type="button"><b>undefined</b> Comments</button>
+          
+          <button class="btn btn-info" type="button"><b>undefined</b> Shares</button></div>
       </div> -->
 
 
     </div>
   </div>
 
+  <div class="modal fade" id="mediaModal" tabindex="-1" aria-labelledby="mediaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="mediaModalLabel">Media</h5>
+
+        </div>
+        <div class="modal-body">
+          <img src="" id="modalImage" class="img-fluid d-none" alt="">
+          <video controls id="modalVideo" class="d-none" style="width: 100%;">
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <div class="loader mt-5 m-auto "></div>
 
   <div class="text-center my-5"><button class="btn btn-success" id="loadMore">Load More Post</button>
-  
-</div>
+
+  </div>
+
+
   <script type="module" src="./scripts/dashboard.js"></script>
   <?php
   include("./footer.php");
