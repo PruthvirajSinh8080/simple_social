@@ -95,11 +95,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         require_once('./close_conn.php');
     }
 }
-//  else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    
-// //     $progress = get_upload_progress();
 
-// //     $success = array( "percent" => $progress);
-// //     $jsonSuccess = json_encode($success);
-// //     echo $jsonSuccess;
-// // }

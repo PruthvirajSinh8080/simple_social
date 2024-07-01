@@ -319,14 +319,18 @@ export async function sendOtp(otp) {
         method: "POST",
         body: JSON.stringify(data),
       });
-      // console.log(await response.text());
+      let ranPassFromServer = await response.json();
+      // console.log(ranPassFromServer);
       otp = "sented";
+      document.getElementById("verificationCode").value = ranPassFromServer.ranPass;
       return otp;
     } catch (error) {
       console.error(error);
     }
     //it set otp that means otp is sented now verify it
+    
     console.log(otp + "otp at end");
+    return otp;
   }
 }
 export async function verifyPasscode(otp) {
@@ -553,13 +557,13 @@ export async function loadPost(currentOffset) {
       PostCreationTime.classList.add("post-time", "text-muted");
       PostCreationTime.textContent = new Date(feed.created_at).toLocaleString();
 
-          // title div for post
+      // title div for post
 
       const title = document.createElement("h5");
       title.classList.add("card-title", "my-1");
       title.textContent = feed.title;
 
-        //image div for post
+      //image div for post
 
       const imageDiv = document.createElement("div");
       imageDiv.classList.add("card-img", "border");
@@ -581,7 +585,7 @@ export async function loadPost(currentOffset) {
         mediaContainer.appendChild(video);
       }
 
-          //discription area for post
+      //discription area for post
 
       const description = document.createElement("div");
       description.classList.add("my-2", "mx-2");
