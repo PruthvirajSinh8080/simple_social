@@ -302,7 +302,7 @@ export async function sendOtp(otp) {
       )
     ) {
       email = atob(sessionStorage.getItem("userEmailEncrypt"));
-      console.log(email + "   1");
+      // console.log(email + "   1");
     }
     //create pass for verify
     let ranPassCode = randomPassCode(8);

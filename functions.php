@@ -68,6 +68,7 @@ function checkUserExist($conn, $user_name, $user_email)
          `zip_code` VARCHAR(10) NOT NULL,
          `country` VARCHAR(50) NOT NULL,
          `profile_pic` VARCHAR(255) NOT NULL,
+         `about_me` TEXT NULL,
           PRIMARY KEY (`u_id`),
           UNIQUE (`user_name`),
           UNIQUE (`user_email`)) ENGINE = InnoDB;
