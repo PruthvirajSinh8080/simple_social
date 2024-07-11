@@ -61,8 +61,9 @@ export function UserInfo() {
     });
 }
 export function hideAlert() {
-  let RedAlert = document.getElementById("red-alert");
-  RedAlert.style.display = "none";
+  let RedAlert = document.getElementById("alert");
+  setTimeout((RedAlert.style.display = "none"), 3000);
+  // RedAlert.style.display = "none";
 }
 export function redAlertDanger(data) {
   if (typeof data === "object") {
@@ -322,13 +323,14 @@ export async function sendOtp(otp) {
       let ranPassFromServer = await response.json();
       // console.log(ranPassFromServer);
       otp = "sented";
-      document.getElementById("verificationCode").value = ranPassFromServer.ranPass;
+      document.getElementById("verificationCode").value =
+        ranPassFromServer.ranPass;
       return otp;
     } catch (error) {
       console.error(error);
     }
     //it set otp that means otp is sented now verify it
-    
+
     console.log(otp + "otp at end");
     return otp;
   }
@@ -498,9 +500,6 @@ export function changePass() {
 export async function loadPost(currentOffset) {
   const postDiv = document.getElementById("post");
 
-  const loadingIndicator = document.querySelector(".loader");
-  loadingIndicator.style.display = "block";
-
   // get posts from database
 
   try {
@@ -515,142 +514,185 @@ export async function loadPost(currentOffset) {
     const feedData = await response.json();
 
     feedData.forEach((feed) => {
-      // console.log(currentOffset);
-      // console.log(feed);
-      const postDiv = document.getElementById("post");
-
-      const card = document.createElement("div");
-      card.classList.add("card", "mt-2");
-
-      const cardBody = document.createElement("div");
-      cardBody.classList.add("card-body", "border");
-
-      const postInfo = document.createElement("div");
-      postInfo.classList.add(
-        `${feed.post_id}`,
-        "d-flex",
-        "align-items-center",
-        "mb-1"
-      );
-
-      const userPic = document.createElement("img");
-      userPic.classList.add("user-pic");
-      userPic.src = `images/${feed.user_profile_pic}`;
-      userPic.alt = "Profile_Picture";
-      userPic.width = "40";
-      userPic.height = "40";
-
-        
-
-      const userDetails = document.createElement("div");
-      userDetails.classList.add("user-details", "ms-2");
-
-      //user name div of post
-
-      const userName = document.createElement("div");
-      userName.classList.add("user-name", "fw-bold");
-      userName.textContent = feed.u_name;
-
-      //upload time div for post
-
-      const PostCreationTime = document.createElement("div");
-      PostCreationTime.classList.add("post-time", "text-muted");
-      PostCreationTime.textContent = new Date(feed.created_at).toLocaleString();
-
-      // title div for post
-
-      const title = document.createElement("h5");
-      title.classList.add("card-title", "my-1");
-      title.textContent = feed.title;
-
-      //image div for post
-
-      const imageDiv = document.createElement("div");
-      imageDiv.classList.add("card-img", "border");
-
-      //this make decision if the type of media is image or video
-
-      const mediaContainer = document.createElement("div");
-      if (feed.media_type == "image/jpeg") {
-        const image = document.createElement("img");
-        image.src = `images/${feed.media}`;
-        image.alt = "";
-        image.classList.add("img-fluid", "card-img-top", "p-1");
-        mediaContainer.appendChild(image);
-      } else {
-        const video = document.createElement("video");
-        video.src = `images/${feed.media}`;
-        video.controls = true; // Adds play, pause, volume controls
-        video.classList.add("img-fluid", "card-img-top", "p-1");
-        mediaContainer.appendChild(video);
-      }
-
-      //discription area for post
-
-      const description = document.createElement("div");
-      description.classList.add("my-2", "mx-2");
-      description.textContent = feed.post_content;
-
-      const buttonsDiv = document.createElement("div");
-      buttonsDiv.classList.add("d-flex", "gap-2", "w-100", "my-2");
-
-      //---------like button--------//
-
-      const likeButton = document.createElement("button");
-      likeButton.classList.add("btn", "btn-primary", "likes");
-      likeButton.type = "button";
-      likeButton.innerHTML = `<b>${feed.like_count}</b> Like`;
-
-      // Attach event listener to the like button
-      likeButton.addEventListener("click", async function (event) {
-        try {
-          await likePost(feed.post_id, event);
-        } catch (error) {
-          console.error("An error occurred while liking the post:", error);
-        }
-      });
-
-      //---------comment button--------//
-
-      const commentButton = document.createElement("button");
-      commentButton.classList.add("btn", "btn-secondary");
-      commentButton.type = "button";
-      commentButton.innerHTML = `<b>${feed.comment_count}</b> Comments`;
-
-      //---------share button--------//
-
-      const shareButton = document.createElement("button");
-      shareButton.classList.add("btn", "btn-info");
-      shareButton.type = "button";
-      shareButton.innerHTML = `<b>${feed.share_count}</b> Shares`;
-
-      //append created divs to their respective parent div
-
-      card.appendChild(cardBody);
-      cardBody.appendChild(postInfo);
-      postInfo.appendChild(userPic);
-      postInfo.appendChild(userDetails);
-      userDetails.appendChild(userName);
-      userDetails.appendChild(PostCreationTime);
-      cardBody.appendChild(title);
-      cardBody.appendChild(imageDiv);
-      imageDiv.appendChild(mediaContainer);
-      cardBody.appendChild(description);
-      cardBody.appendChild(buttonsDiv);
-      buttonsDiv.appendChild(likeButton);
-      buttonsDiv.appendChild(commentButton);
-      buttonsDiv.appendChild(shareButton);
-
-      return postDiv.appendChild(card);
+      //calls post body createing function
+      createPostBody(feed);
     });
+
     // turn off the loading animation
-    loadingIndicator.style.display = "none";
 
     return feedData.length;
   } catch (error) {
     console.error("Error fetching data:", error);
     return null;
   }
+}
+///templet for post body
+export function createPostBody(feed) {
+  const postDiv = document.getElementById("post");
+
+  const card = document.createElement("div");
+  card.classList.add("card", "mt-2");
+
+  const cardBody = document.createElement("div");
+  cardBody.classList.add("card-body", "border");
+
+  const postInfo = document.createElement("div");
+  postInfo.classList.add(
+    `${feed.post_id}`,
+    "d-flex",
+    "align-items-center",
+    "mb-1"
+  );
+
+  const userPic = document.createElement("img");
+  userPic.classList.add("user-pic", "rounded");
+  userPic.src = `images/${feed.user_profile_pic}`;
+  userPic.alt = "Profile_Picture ";
+  userPic.width = "40";
+  userPic.height = "40";
+
+  const userDetails = document.createElement("div");
+  userDetails.classList.add("user-details", "ms-2");
+
+  //user name div of post
+
+  const userName = document.createElement("div");
+  userName.classList.add("user-name", "fw-bold");
+  userName.textContent = feed.u_name;
+
+  //upload time div for post
+
+  const PostCreationTime = document.createElement("div");
+  PostCreationTime.classList.add("post-time", "text-muted");
+  PostCreationTime.textContent = new Date(feed.created_at).toLocaleString();
+
+  // title div for post
+
+  const title = document.createElement("h5");
+  title.classList.add("card-title", "my-1");
+  title.textContent = feed.title;
+
+  //image div for post
+
+  const imageDiv = document.createElement("div");
+  imageDiv.classList.add("card-img", "border");
+
+  //this make decision if the type of media is image or video
+
+  const mediaContainer = document.createElement("div");
+  if (feed.media_type == "image/jpeg") {
+    const image = document.createElement("img");
+    image.src = `images/${feed.media}`;
+    image.alt = "";
+    image.classList.add("img-fluid", "card-img-top", "p-1");
+    mediaContainer.appendChild(image);
+  } else {
+    const video = document.createElement("video");
+    video.src = `images/${feed.media}`;
+    video.controls = true; // Adds play, pause, volume controls
+    video.classList.add("img-fluid", "card-img-top", "p-1");
+    mediaContainer.appendChild(video);
+  }
+
+  //discription area for post
+
+  const description = document.createElement("div");
+  description.classList.add("my-2", "mx-2");
+  description.textContent = feed.post_content;
+
+  const buttonsDiv = document.createElement("div");
+  buttonsDiv.classList.add("d-flex", "gap-2", "w-100", "my-2");
+
+  //---------like button--------//
+
+  const likeButton = document.createElement("button");
+  likeButton.classList.add("btn", "btn-primary", "likes");
+  likeButton.type = "button";
+  likeButton.innerHTML = `<b>${feed.like_count}</b> Like`;
+
+  // Attach event listener to the like button
+  likeButton.addEventListener("click", async function (event) {
+    try {
+      await likePost(feed.post_id, event);
+    } catch (error) {
+      console.error("An error occurred while liking the post:", error);
+    }
+  });
+
+  //---------comment button--------//
+
+  const commentButton = document.createElement("button");
+  commentButton.classList.add("btn", "btn-secondary");
+  commentButton.type = "button";
+  commentButton.setAttribute("data-toggle", "modal");
+  commentButton.setAttribute("data-target", "#comment_popup");
+  commentButton.innerHTML = `<b>${feed.comment_count}</b> Comments`;
+
+  //update the comment count as user adds one
+  async function handlePostComment(event, postId) {
+    try {
+      /////// Extract the current number of comments
+      let currentCommentCount = parseInt(
+        commentButton.querySelector("b").textContent.match(/\d+/)[0]
+      );
+
+      //////// Update the comment count on the button
+      const commentPosted = await sendComment(postId, event);
+      if (commentPosted) {
+        commentButton.querySelector("b").textContent = `${
+          currentCommentCount + 1
+        }`;
+      }
+    } catch (error) {
+      console.error("An error occurred while posting the comment:", error);
+    }
+  }
+
+  // Attach event listener to comment button
+  commentButton.addEventListener("click", async function (event) {
+    try {
+      // Load comments from the database when the user clicks the comment button
+      await loadComment(feed.post_id, event);
+
+      let sendCommentBtn = document.getElementById("post_comment");
+
+      // Remove any existing event listener to avoid multiple triggers
+      sendCommentBtn.replaceWith(sendCommentBtn.cloneNode(true)); // Clone the button to remove all existing listeners
+      sendCommentBtn = document.getElementById("post_comment"); // Get the new button with no listeners
+
+      // Attach a new event listener for posting a comment
+      sendCommentBtn.addEventListener("click", (e) =>
+        handlePostComment(e, feed.post_id)
+      );
+    } catch (error) {
+      console.error("An error occurred while getting the post comment:", error);
+    }
+  });
+  //---------share button--------//
+
+  const shareButton = document.createElement("button");
+  shareButton.classList.add("btn", "btn-info");
+  shareButton.type = "button";
+  shareButton.innerHTML = `<b>${feed.share_count}</b> Shares`;
+
+  //append created divs to their respective parent div
+
+  card.appendChild(cardBody);
+  cardBody.appendChild(postInfo);
+  postInfo.appendChild(userPic);
+  postInfo.appendChild(userDetails);
+  userDetails.appendChild(userName);
+  userDetails.appendChild(PostCreationTime);
+  cardBody.appendChild(title);
+  cardBody.appendChild(imageDiv);
+  imageDiv.appendChild(mediaContainer);
+  cardBody.appendChild(description);
+  cardBody.appendChild(buttonsDiv);
+  buttonsDiv.appendChild(likeButton);
+  buttonsDiv.appendChild(commentButton);
+  buttonsDiv.appendChild(shareButton);
+
+  return postDiv.appendChild(card);
 }
 
 //          ----upload post to database ----
@@ -741,4 +783,123 @@ export async function likePost(postId, event) {
   } catch (error) {
     console.error("An error occurred:", error);
   }
+}
+function renderComment(comment_data) {
+  // let commentBox = document.getElementById("comment_section");
+
+  let commentCard = document.createElement("div");
+  commentCard.classList.add("card", "mb-2");
+  commentCard.id = "comment_card";
+
+  let cardBody = document.createElement("div");
+  cardBody.classList.add("card-body");
+
+  let userInfoDiv = document.createElement("div");
+  userInfoDiv.classList.add("d-flex", "align-items-center", "mb-1");
+
+  let userPic = document.createElement("img");
+  userPic.classList.add("user-pic");
+  userPic.src = "images/" + comment_data.user_pic;
+  userPic.width = 40;
+  userPic.height = 40;
+  userPic.alt = "User-Profile-pic";
+
+  let userInfo = document.createElement("div");
+  userInfo.classList.add("ms-2");
+
+  let userNameDiv = document.createElement("div");
+  userNameDiv.classList.add("fw-bold", "user_name");
+  userNameDiv.textContent = comment_data.userName;
+
+  let postTimeDiv = document.createElement("div");
+  postTimeDiv.classList.add("text-muted", "small", "post_time");
+  postTimeDiv.textContent = comment_data.commentTime;
+
+  let commentContent = document.createElement("p");
+  commentContent.classList.add("card-text", "ms-2", "comment_content");
+  commentContent.textContent = comment_data.comment_content;
+
+  commentCard.appendChild(cardBody);
+  cardBody.appendChild(userInfoDiv);
+  userInfoDiv.appendChild(userPic);
+  userInfoDiv.appendChild(userInfo);
+  userInfo.appendChild(userNameDiv);
+  userInfo.appendChild(postTimeDiv);
+  cardBody.appendChild(commentContent);
+
+  return commentCard;
+}
+
+// loadcomment function that will load comment of  particular post in modal
+export async function loadComment(postId, event) {
+  //comment box div to get accese to it
+  let commentBox = document.getElementById("comment-box");
+  commentBox.textContent = "No Comments Yet, Be The First One To Comment...";
+
+  //loader animation
+  const loadingIndicator = document.querySelector(".loader");
+
+  //close btn to close the modal that is poped up
+  const closeBtn = document.getElementById("comment_close_btn");
+  //loader is now visible
+  loadingIndicator.style.display = "block";
+  let modal = document.getElementById("comment_section");
+
+  const response = await fetch("load_comment.php?q=getcomments", {
+    method: "POST",
+    body: postId,
+  });
+
+  let res = await response.json();
+  // console.log(res);
+
+  loadingIndicator.style.display = "none";
+
+  // Load comments in a proper manner
+  if (res.comment_data && res.comment_data.length > 0) {
+    commentBox.textContent = ""; // Clear the placeholder text
+    res.comment_data.forEach((comment) => {
+      commentBox.appendChild(renderComment(comment));
+    });
+  } else {
+    commentBox.textContent = "No comments to load"; // Set message if no comments
+  }
+
+  // commentBox.appendChild(renderComment(res.comment_data));
+  // this removes the previously added comment from model so the modal only contains the current post's comment
+  // closeBtn.addEventListener("click", (e) => {
+  //   commentBox.innerHTML = "";
+  // });
+}
+
+export async function sendComment(postId, event) {
+  let commentText = document.getElementById("comment");
+  let postBtn = document.getElementById("post_comment");
+
+  const data = {
+    text: commentText.value,
+    post_id: postId,
+  };
+
+  try {
+    if (!commentText.value) {
+      console.log("message is empty");
+      return false;
+    } else {
+      let response = await fetch("load_comment.php?q=setcomments", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      let confirm = await response.json();
+      handleData(confirm);
+
+      // this will add the newly append comment in the box so user can see it
+      let commentBox = document.getElementById("comment-box");
+      const closeBtn = document.getElementById("comment_close_btn");
+
+      commentBox.appendChild(renderComment(confirm));
+
+      return true;
+    }
+  } catch (error) {}
 }

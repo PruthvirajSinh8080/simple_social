@@ -32,7 +32,7 @@ showPage("header", ['title' => "Welcome $userName"]);
                         <div class="row">
                             <div class="col-md-4">
                                 <img src="profile-pic.jpg" id="profile_pic"
-                                width="200px" height="200px"class="img-fluid bordered" alt="Profile Picture">
+                                width="200px" height="200px"class="img-fluid rounded" alt="Profile Picture">
                             </div>
                             <div class="col-md-8 align-middle flex">
                                 <h3>User:- <?= $_SESSION['user_name'] ?></h3>

@@ -25,7 +25,7 @@ showPage("header", ['title' => 'DeshBoard']);
 
 <div class="container">
 
-
+<div class="alert alert-danger" id="red-alert" role="alert"></div>
 
   <!-- Green box with user info -->
   <div class="card m-auto col-sm-12 col-md-8 col-lg-8 col-xl-8 col-xxl-6 ">
@@ -72,34 +72,69 @@ showPage("header", ['title' => 'DeshBoard']);
 
     </div>
   </div>
-
-  <div class="modal fade" id="mediaModal" tabindex="-1" aria-labelledby="mediaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+  <!-- Modal -->
+  <div class="modal fade" id="comment_popup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="mediaModalLabel">Media</h5>
-
+          <h5 class="modal-title" id="exampleModalLabel">Leave A Comments...</h5>
+          <button type="button" id="comment_close_btn" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div class="modal-body">
-          <img src="" id="modalImage" class="img-fluid d-none" alt="">
-          <video controls id="modalVideo" class="d-none" style="width: 100%;">
-            <source src="" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+        <div class="modal-body" id="comment_section">
+          <!-- comment box -->
+          <div class="comment-box" id="comment-box">
+            <!-- comments goes here -->No Comments Yet..
+          </div>
+          <div class="modal-footer">
+
+            <div class="loader mt-5 m-auto "></div>
+            <div class="container card-footer">
+              <!-- Comment Form -->
+              <div class="mb-1">
+                <label for="comment" class="form-label" id="comment_label">Add a comment</label>
+                <textarea class="form-control" id="comment"></textarea>
+                <button class="comment_btn btn btn-primary mt-2" id="post_comment" >Post Comment</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
 
-  <div class="loader mt-5 m-auto "></div>
 
-  <div class="text-center my-5"><button class="btn btn-success" id="loadMore">Load More Post</button>
+<div class="modal fade" id="mediaModal" tabindex="-1" aria-labelledby="mediaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mediaModalLabel">Media</h5>
 
+      </div>
+      <div class="modal-body">
+        <img src="" id="modalImage" class="img-fluid d-none" alt="">
+        <video controls id="modalVideo" class="d-none" style="width: 100%;">
+          <source src="" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+    </div>
   </div>
+</div>
 
 
-  <script type="module" src="./scripts/dashboard.js"></script>
-  <?php
-  include("./footer.php");
-  ?>
+<div class="loader mt-5 m-auto "></div>
+
+<div class="text-center my-5"><button class="btn btn-success" id="loadMore">Load More Post</button>
+
+</div>
+
+
+<script type="module" src="./scripts/dashboard.js"></script>
+<?php
+include("./footer.php");
+?>

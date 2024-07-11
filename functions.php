@@ -150,7 +150,7 @@ function verifyUserInfo($conn, $userOrEmail, $user_pass)
                 $_SESSION['user_name'] = $username;
                 $_SESSION['user_email'] = $email;
                 $_SESSION['u_id'] =  $u_id;
-                $success = array("type" => "success", "successId" => "verified", "successMsg" => "User Verification Successfull.", "redirect" => "registration_success", "u_id" => "$u_id");
+                $success = array("type" => "success", "successId" => "verified", "successMsg" => "Welcome $username .Hang Tight, We Are Logging You In...Enjoy.", "redirect" => "registration_success", "u_id" => "$u_id");
                 echo json_encode($success);
                 exit();
             } else {
@@ -166,7 +166,7 @@ function verifyUserInfo($conn, $userOrEmail, $user_pass)
             exit();
         }
     } else {
-        $error = array("type" => "error", "errId" => "row !== 1", "errMsg" => "row == 1 else statment", "redirect" => "sign_in");
+        $error = array("type" => "error", "errId" => "row !== 1", "errMsg" => "Oops!! Something Went Wrong, Try Again After Some Time.Thank You..", "redirect" => "sign_in");
         echo json_encode($error);
         exit();
     }

@@ -1,23 +1,33 @@
 import { loadPost } from "./function.js";
+import { redAlert } from "./alerts.js";
+
+redAlert();
 
 let currentOffset = 0;
 const limit = 10;
+//loader
+const loadingIndicator = document.getElementsByClassName("loader")[1];
+
 
 async function loadingPost() {
+  loadingIndicator.style.display = "block";
   let countPost = await loadPost(currentOffset);
   currentOffset += countPost;
   console.log(currentOffset);
+  loadingIndicator.style.display = "none";
 }
 
 loadingPost();
 console.log(currentOffset);
 
+
 let loadMore = document.getElementById("loadMore");
 loadMore.addEventListener("click", async (e) => {
   e.preventDefault;
   // currentOffset += limit;
-
+  loadingIndicator.style.display = "block";
   loadingPost();
+  loadingIndicator.style.display = "none";
   console.log(currentOffset);
 });
 
@@ -28,7 +38,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let closeBtn = document.querySelector("close");
 
   
-
+//popup modal that lets user see media in seprate window
   postContainer.addEventListener("click", function (event) {
     if (event.target.tagName === "IMG" || event.target.tagName === "VIDEO") {
       const modalImage = document.getElementById("modalImage");
@@ -58,3 +68,5 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   });
 });
+
+
