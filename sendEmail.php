@@ -1,5 +1,6 @@
 <?php
 include_once("./functions.php");
+require_once("./conn.php");
 session_start();
 
 if (!isset($_GET['forget']) && !isset($_GET['forgetotp'])) {
@@ -180,20 +181,24 @@ if (isset($_GET['forgetotp'])) {
     }
 }
 if (isset($_GET['forget'])) {
+    //extract email to verify 
     $getPass = file_get_contents("php://input");
+    //if not empty var
     if (!empty($getPass)) {
         
         // Decode the JSON data
         $decoded = json_decode($getPass, true);
-        // $conn = connectDatabase("localhost", "root", "", "user_signup_info");
-        $query = "SELECT * FROM `signup_info` WHERE `user_email` = '$decoded';";
-        //user nu email serch ma lavu ane aagli proccees karvi
+        
+        $query = "SELECT * FROM `signup_info` WHERE BINARY `user_email` = '$decoded';";
+
+        //check the database by firing query
         $fireQuery = mysqli_query($conn, $query);
         $row = mysqli_num_rows($fireQuery);
         $result = mysqli_fetch_assoc($fireQuery);
 
-
+        //if row is one and the provied email match with database entry
         if ($row === 1 && $result['user_email'] === $decoded) {
+            
             $_SESSION["email"] = $email = $result['user_email'];
             $success = array("type" => "success", "successId" => "otp_sended", "successMsg" => "We Are Sending You A verification OTP On Your Email.", "redirect" => "  ", "email" => "$email");
             echo json_encode($success);

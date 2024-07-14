@@ -385,6 +385,7 @@ export function forgetPass() {
     redAlertDanger("Email Should Not Empty.");
     return false;
   }
+
   //send email info to check if the enterd email is registerd to site
   fetch("./sendEmail.php?forget", {
     method: "POST",
@@ -404,67 +405,41 @@ export function forgetPass() {
         }
       } else {
         redAlertGreen(data);
+
+        let ranPassCode = randomPassCode(8);
+        let otpDiv = document.getElementById("otpDiv");
+        otpDiv.classList.remove("collapse");
+        let forgetOTP = document.getElementById("forgetOtp");
+        forgetOTP.value = ranPassCode;
+        sessionStorage.setItem("forgetOTP", ranPassCode);
       }
-      let ranPassCode = randomPassCode(8);
-      const info = {
-        //data to be sent to server for sending email to user
-        Email: data.email,
-        ranPass: ranPassCode,
-        OTP: "sented",
-      };
-      try {
-        fetch("./sendEmail.php?forgetotp", {
-          method: "POST",
-          body: JSON.stringify(info),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error();
-            }
-            return response.json();
-          })
-          .then((data) => {
-            if (data.type === "error") {
-              redAlertDanger(data);
-            } else {
-              redAlertGreen(data);
-              sessionStorage.setItem("forgetOTP", data.ranPass);
-              console.log("forgetpass is set to session storege");
-              let otpDiv = document.getElementById("otpDiv");
-              otpDiv.classList.remove("collapse");
-            }
-          });
-      } catch (error) {
-        console.error(error);
-      }
-    })
-    .catch((error) => {
-      console.error("error :-", error);
     });
 }
 export function verifyForgetOtp() {
-  console.log("start verify");
+  // console.log("start verify");
   let forgetOTP = document.getElementById("forgetOtp");
-  let verifyOTPbtn = document.getElementById("verifyOTP");
   let RedAlert = document.getElementById("red-alert");
   RedAlert.style.display = "none";
   //check if email is not empty befor sending to the server
-  verifyOTPbtn.addEventListener("click", (e) => {
-    if (forgetOTP.value === sessionStorage.getItem("forgetOTP")) {
-      console.log("cheking pass otp");
-      let newPassDiv = document.getElementById("newPassDiv");
-      newPassDiv.classList.remove("collapse");
 
-      //calls the isPassStrong function to show pass strength meter
-      const userPassInput = document.getElementById("newPass");
-      userPassInput.addEventListener("input", (e) => {
-        isPassStrong(userPassInput.value, "newPassBtn");
-      });
-    } else {
-      redAlertDanger("Enter OTP Here.");
-    }
-  });
-  console.log("end verify");
+  if (forgetOTP.value === sessionStorage.getItem("forgetOTP")) {
+    // console.log("cheking pass otp");
+    let newPassDiv = document.getElementById("newPassDiv");
+    newPassDiv.classList.remove("collapse");
+
+    //calls the isPassStrong function to show pass strength meter
+    const userPassInput = document.getElementById("newPass");
+    userPassInput.addEventListener("input", (e) => {
+      isPassStrong(userPassInput.value, "newPassBtn");
+    });
+  } else if(!forgetOTP.value){
+    redAlertDanger("OTP Should Not Be Empty!");
+  }
+   else {
+    redAlertDanger("Otp Does Not Match!");
+  }
+
+  // console.log("end verify");
 }
 export function changePass() {
   let conNewPass = document.getElementById("conNewPass");
@@ -472,7 +447,7 @@ export function changePass() {
   const data = {
     newPass: newPass,
   };
-  hideAlert();
+  // hideAlert();
   if (newPass === conNewPass.value) {
     fetch("./update_pass.php?updatePass", {
       method: "POST",

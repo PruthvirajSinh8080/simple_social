@@ -1,6 +1,7 @@
 import { redAlert } from "./alerts.js";
-import {loadPopOvers,forgetPass,randomPassCode,verifyForgetOtp,showPass,changePass,redAlertDanger,redAlertGreen } from "./function.js";
+import {loadPopOvers,forgetPass,verifyForgetOtp,changePass,showPass,hideAlert} from "./function.js";
 redAlert();
+
 showPass("confirm-new-pass","newPass","conNewPass",)
 loadPopOvers();
 
@@ -8,12 +9,13 @@ loadPopOvers();
     let submitEmail = document.getElementById("submitEmail");
     submitEmail.addEventListener("click", (e) => {
         e.preventDefault();
-        forgetPass("submit");
+        
+        forgetPass();
     });
     let verifyOTP = document.getElementById("verifyOTP");
-    submitEmail.addEventListener("click", (e) => {
+    verifyOTP.addEventListener("click", (e) => {
         e.preventDefault();
-        verifyForgetOtp("verify");
+        verifyForgetOtp();
     });
     let changePassBtn = document.getElementById("newPassBtn");
     changePassBtn.addEventListener("click", (e) => {

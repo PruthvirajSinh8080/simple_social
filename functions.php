@@ -124,7 +124,9 @@ function verifyUserInfo($conn, $userOrEmail, $user_pass)
 {
     //query  to check the inserted user info is accurate or not?
     $query = "SELECT * FROM signup_info WHERE (BINARY user_name = '$userOrEmail' OR BINARY user_email = '$userOrEmail');";
+
     $query_verifyUserInfo = mysqli_query($conn, $query);
+    // var_dump($query_verifyUserInfo);
     $row = mysqli_num_rows($query_verifyUserInfo);
     $result = mysqli_fetch_assoc($query_verifyUserInfo);
     //result from database
@@ -154,7 +156,7 @@ function verifyUserInfo($conn, $userOrEmail, $user_pass)
                 echo json_encode($success);
                 exit();
             } else {
-                $error = array("type" => "error", "errId" => "verification failed", "errMsg" => "UserInfo Is Not Valid", "redirect" => "");
+                $error = array("type" => "error", "errId" => "verification failed", "errMsg" => "Provided User Info Is Not Valid", "redirect" => "");
                 echo json_encode($error);
                 //if more than 1 or less than 1 row gets in output throw error
                 exit();
@@ -166,7 +168,7 @@ function verifyUserInfo($conn, $userOrEmail, $user_pass)
             exit();
         }
     } else {
-        $error = array("type" => "error", "errId" => "row !== 1", "errMsg" => "Oops!! Something Went Wrong, Try Again After Some Time.Thank You..", "redirect" => "sign_in");
+        $error = array("type" => "error", "errId" => "row !== 1", "errMsg" => "Provided Data Is Incorrect", "redirect" => "");
         echo json_encode($error);
         exit();
     }
